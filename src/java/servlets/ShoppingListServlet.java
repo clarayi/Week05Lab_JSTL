@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,8 @@ import javax.servlet.http.HttpSession;
 public class ShoppingListServlet extends HttpServlet
 {
     private HttpSession session = null;
-
+    private ArrayList<String> itemList = new ArrayList<>();
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -46,8 +48,25 @@ public class ShoppingListServlet extends HttpServlet
     {
         System.out.println("<<ShoppingListServlet / In doPost method>>");
         
+        String parameterValue = request.getParameter("action");
         session = request.getSession();
-        String userName = request.getParameter("username");
+        
+        if(parameterValue.equals("register"))
+        {
+            String userName = request.getParameter("username");
+            session.setAttribute("username", userName);
+
+            getServletContext().getRequestDispatcher("/WEB-INF/shoppinglist.jsp").forward(request, response);
+        }
+        else if(parameterValue.equals("add"))
+        {
+            String inputItem = request.getParameter("inputItem");
+            itemList.add(inputItem);
+            
+            session.setAttribute("itemList", itemList);
+            
+            getServletContext().getRequestDispatcher("/WEB-INF/shoppinglist.jsp").forward(request, response);
+        }
     }
 
     /**
