@@ -24,8 +24,7 @@ public class ShoppingListServlet extends HttpServlet
         System.out.println("<<ShoppingListServlet / In doGet method>>");
         
         session = request.getSession();
-        
-        
+
         String parameterValue = request.getParameter("action");
         
         if(parameterValue != null && parameterValue.equals("logout"))
@@ -75,13 +74,20 @@ public class ShoppingListServlet extends HttpServlet
         {
             String clickedRadioButton = request.getParameter("radioButton");
             
-            for(int i = 0;  i < itemList.size(); i++)
+            if(clickedRadioButton == null)
             {
-                String oneItem = itemList.get(i);
-                
-                if(clickedRadioButton.equals(oneItem))
+                request.setAttribute("errorMessage", "Please click one of the items to delete.");
+            }
+            else
+            {
+                for(int i = 0;  i < itemList.size(); i++)
                 {
-                    itemList.remove(i);
+                    String oneItem = itemList.get(i);
+
+                    if(clickedRadioButton.equals(oneItem))
+                    {
+                        itemList.remove(i);
+                    }
                 }
             }
             
