@@ -11,38 +11,32 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author 810783
+ * @author Hyun Ji Lee (810783)
  */
 public class ShoppingListServlet extends HttpServlet
 {
     private HttpSession session = null;
-    private ArrayList<String> itemList = new ArrayList<>();
-    
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    private ArrayList<String> itemList;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         System.out.println("<<ShoppingListServlet / In doGet method>>");
         
+        session = request.getSession();
+        
+        
+        String parameterValue = request.getParameter("action");
+        
+        if(parameterValue != null && parameterValue.equals("logout"))
+        {
+            session.removeAttribute("username");
+            session.removeAttribute("itemList");
+        }
+        
         getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -54,26 +48,47 @@ public class ShoppingListServlet extends HttpServlet
         if(parameterValue.equals("register"))
         {
             String userName = request.getParameter("username");
-            session.setAttribute("username", userName);
 
+            session.setAttribute("username", userName);
+            session.removeAttribute("itemList");
+            itemList = new ArrayList<>();
+                
             getServletContext().getRequestDispatcher("/WEB-INF/shoppinglist.jsp").forward(request, response);
         }
         else if(parameterValue.equals("add"))
         {
             String inputItem = request.getParameter("inputItem");
-            itemList.add(inputItem);
             
-            session.setAttribute("itemList", itemList);
+            if(inputItem == null || inputItem.equals(""))
+            {
+                request.setAttribute("errorMessage", "Please fill in the input field!");
+            }
+            else
+            {
+                itemList.add(inputItem);
+                session.setAttribute("itemList", itemList);
+            }
+            
+            getServletContext().getRequestDispatcher("/WEB-INF/shoppinglist.jsp").forward(request, response);
+        }
+        else if(parameterValue.equals("delete"))
+        {
+            String clickedRadioButton = request.getParameter("radioButton");
+            
+            for(int i = 0;  i < itemList.size(); i++)
+            {
+                String oneItem = itemList.get(i);
+                
+                if(clickedRadioButton.equals(oneItem))
+                {
+                    itemList.remove(i);
+                }
+            }
             
             getServletContext().getRequestDispatcher("/WEB-INF/shoppinglist.jsp").forward(request, response);
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo()
     {

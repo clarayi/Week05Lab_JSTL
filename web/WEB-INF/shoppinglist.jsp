@@ -10,27 +10,28 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>CPRG352 Lab5 JSTL</title>
     </head>
     <body>
         <h1>Shopping List</h1>
-        Hello,${username} <a href="">Logout</a><br>
+        Hello,${username} <a href="ShoppingList?action=logout">Logout</a><br>
         <form method="post">
             <h2>List</h2>
-            Add item: <input name="inputItem" type="text" required/> <input type="submit" value="Add" formaction="ShoppingList?action=add">
+            Add item: <input name="inputItem" type="text"/> <input type="submit" value="Add" formaction="ShoppingList?action=add">
+            <table>
+                <c:forEach var="oneItem" items="${itemList}">
+                    <tr>
+                        <td><input type="radio" value="${oneItem}" name="radioButton"/></td>
+                        <td>${oneItem}</td>
+                    </tr>
+                </c:forEach>
+                <c:if test="${itemList.size() > 0}">
+                    <tr>
+                        <td colspan="2"><input type="submit" value="Delete" formaction="ShoppingList?action=delete"</td>
+                    </tr>
+                </c:if>
+            </table>
+            <p>${errorMessage}</p>
         </form>
-        <table>
-            <c:forEach var="oneItem" items="${itemList}">
-                <tr>
-                    <td><input type="radio" value="${oneItem}"/></td>
-                    <td>${oneItem}</td>
-                </tr>
-            </c:forEach>
-            <c:if test="${itemList.size > 1}">
-                <tr>
-                    <td colspan="2"><input type="submit" value="Delete" formaction="ShoppingList?action=delete"</td>
-                </tr>
-            </c:if>
-        </table>
     </body>
 </html>
