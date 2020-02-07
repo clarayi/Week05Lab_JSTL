@@ -45,6 +45,9 @@ public class ShoppingListServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         System.out.println("<<ShoppingListServlet / In doPost method>>");
+        
+        session = request.getSession();
+        String userName = request.getParameter("username");
     }
 
     /**
