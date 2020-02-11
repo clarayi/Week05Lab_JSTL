@@ -75,7 +75,7 @@ public class ShoppingListServlet extends HttpServlet
         {
             String clickedRadioButton = request.getParameter("radioButton");
             
-            if(clickedRadioButton == null)
+            if(clickedRadioButton == null || clickedRadioButton.equals(""))
             {
                 request.setAttribute("errorMessage", "Please click one of the items to delete.");
             }
