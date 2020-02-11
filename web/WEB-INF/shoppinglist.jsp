@@ -35,3 +35,21 @@
         </form>
     </body>
 </html>
+
+<!-- Alternative
+<form method="post">
+    <input type="hidden" name="action" value="add"/>
+    Add item: <input name="inputItem" type="text"/> <input type="submit" value="Add" formaction="ShoppingList?action=add">
+    <input type="submit" name="btnSubmit" value="Add"/>
+</form>
+
+<form method="post">
+    <input type="hidden" name="action" value="delete"/>
+    <c:forEach var="item" items="${itemList}" varStatus="status">
+        <input type="radio" name="radSelect" value="${status.index}" />${item}
+    </c:forEach>
+    <c:if test="${itemList.size() > 0}">
+        <input type="submit" name="btnSubmit" value="Delete"/>
+    </c:if>
+</form>
+-->
